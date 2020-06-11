@@ -13,13 +13,13 @@ public class Philosophe extends Thread{
     /** liste de fourchettes */
     Fourchettes lesFourchettes;
     /**temps min d'une bouchee en milliseconde*/
-    static final int TempsBaseBouchee=100;
+    static final int TempsBaseBouchee=250;
     /**temps max en plus pour une bouchee en milliseconde*/
-    static final int TempsBouchee=500;
+    static final int TempsBouchee=250;
     /**temps min d'une pensee en milliseconde*/
-    static final int TempsMinPensee=100;
+    static final int TempsMinPensee=250;
     /**temps max en plus pour une pensee en milliseconde*/
-    static final int TempsPensee=500;
+    static final int TempsPensee=250;
 
     Philosophe() {}
 
@@ -32,12 +32,16 @@ public class Philosophe extends Thread{
         lesFourchettes = _lesFourchettes;
     }
 
+    public void setNbBouchees(int nbBouchees) {
+        this.nbBouchees = nbBouchees;
+    }
+
     /** initialise le no et nb de bouchees */
-    Philosophe(ThreadGroup groupe, int _no, int _nbBouchees, Fourchettes _lesFourchettes)
+    Philosophe(ThreadGroup groupe, int _no, Fourchettes _lesFourchettes)
     {
         super(groupe, "philo"+_no);
         no = _no;
-        nbBouchees = _nbBouchees;
+        nbBouchees = 10;
         lesFourchettes = _lesFourchettes;
     }
 
@@ -58,16 +62,18 @@ public class Philosophe extends Thread{
             nbBouchees--;
             System.out.println(this.getName() + " : j'ai obtenu les fourchettes, je mange, il me reste " + nbBouchees + " bouchees.");
             try {  Thread.sleep(Philosophe.TempsBaseBouchee +  hasard.nextInt(Philosophe.TempsBouchee ));}
-            catch (InterruptedException e) {}
+            catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             lesFourchettes.deposer(no);
             System.out.println(this.getName() + " : je pense un peu après ma bouchée...");
             try {  Thread.sleep(Philosophe.TempsMinPensee +  hasard.nextInt(Philosophe.TempsPensee ));}
-            catch (InterruptedException e) {}
+            catch (InterruptedException ignored) {}
         }
         long fin = System.currentTimeMillis();
         tempsTotalRepas = (fin-debut)/1000d;
-        System.out.printf("%s : j'ai fini en %.3f s.\n", this.getName(),tempsTotalRepas);
+        System.out.printf("%s : j'ai fini en %.2f s.\n", this.getName(),tempsTotalRepas);
     }
 }
 

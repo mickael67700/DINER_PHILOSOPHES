@@ -1,13 +1,16 @@
+import java.util.Scanner;
 public class LeDiner {
     public static void main(String[] args) {
-        int dim = 7;
+        System.out.println("Nombre de philosophes: ");
+        int dim = new Scanner(System.in).nextInt();
+
         Fourchettes fourchettes = new Fourchettes(dim);
         Philosophe[] mangeurs = new Philosophe[dim];
 
         ThreadGroup groupe = new ThreadGroup("philos");
 
         for (int i =0; i<dim; i++)
-            mangeurs[i] = new  Philosophe(groupe, i, 4, fourchettes);
+            mangeurs[i] = new  Philosophe(groupe, i, fourchettes);
 
         long dateDepart = System.currentTimeMillis();
         for (Philosophe mangeur:mangeurs)  mangeur.start();
